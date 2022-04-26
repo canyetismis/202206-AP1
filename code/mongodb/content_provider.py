@@ -9,7 +9,7 @@ from geopandas import GeoDataFrame
 
 class ContentProvider:
 
-    def __init__(self, database: str, collection: str, uri: str="localhost:27017"):
+    def __init__(self, database: str, collection: str, uri: str = None):
         """
         Content Provider initiates a new connection and provides an interface for interracting with the database.
 
@@ -18,6 +18,9 @@ class ContentProvider:
         :param uri: uri to the database, by default it is set to localhost:27017 (string)
         :return: a ContentProvider object
         """
+
+        #assigns a default value to uri in case no user input is provided
+        uri = "localhost:27017" if uri is None else uri
 
         self.__database = database
         self.__collection = collection
@@ -42,26 +45,31 @@ class ContentProvider:
 
 ### QUERY RELATED METHODS
         
-    def query_data(self, data = {}):
+    def query_data(self, data: dict = None):
         """
         Queries data from the selected database and collection.
         
         :param data: A pymongo query (dict)
         :return query results within a GeoDataFrame object
         """
+        #assigns a default value to data in case no user input is provided
+        #this feature queries for all the data stored within the database
+        data = {} if data is None else data
 
         query_cursor = self.__collection.find(data)
         query = GeoDataFrame(list(query_cursor))
         query_cursor.close() 
         return query
     
-    def insert_data(self, data: GeoDataFrame = GeoDataFrame()):
+    def insert_data(self, data: GeoDataFrame = None):
         """
         Inserts data to the desired database and collection
 
         :param data: A GeoDataFrame object
         """
         
+        data = GeoDataFrame() if data is None else data
+
         if(data.empty):
             raise Exception("Dataframe cannot be null!")
 
