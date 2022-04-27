@@ -50,14 +50,14 @@ class ContentProvider:
         Queries data from the selected database and collection.
         
         :param data: A pymongo query (dict)
-        :return query results within a GeoDataFrame object
+        :return query results as a list of dictionaries
         """
         #assigns a default value to data in case no user input is provided
         #this feature queries for all the data stored within the database
         data = {} if data is None else data
 
         query_cursor = self.__collection.find(data)
-        query = GeoDataFrame(list(query_cursor))
+        query = list(query_cursor)# dumps(query_cursor)
         query_cursor.close() 
         return query
     

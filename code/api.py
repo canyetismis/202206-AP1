@@ -8,7 +8,4 @@ contentProvider = ContentProvider("mongo_test", "geodata")
 @api.get("/query")
 def query():
     query = contentProvider.query_data()
-
-    response = query.to_dict()
-    response = json.dumps(response)
-    return response
+    return query
