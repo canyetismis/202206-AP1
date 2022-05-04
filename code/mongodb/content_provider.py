@@ -3,9 +3,10 @@ Written by Can Yetismis
 Jacobs University Bremen 2022
 """
 
-from pymongo import MongoClient
+from pymongo import MongoClient, GEOSPHERE
 from pymongo.errors import ServerSelectionTimeoutError
 from geopandas import GeoDataFrame
+import warnings
 
 class ContentProvider:
 
@@ -82,3 +83,11 @@ class ContentProvider:
         """
 
         self.__collection.delete_many({})
+
+### INDEX RELATED METHODS
+
+    def create_2dsphere_index(self, column: str = None):
+        if column is None:
+            warnings.warn("Cannot create index! Please specify a column to create 2dsphere index")
+        else:
+            self.__collection.create_index([(column, GEOSPHERE)])
