@@ -77,16 +77,17 @@ class ContentProvider:
         data = data.to_dict(orient='records')
         self.__collection.insert_many(data)
 
-    def delete_data(self):
+    def delete_data(self, data: dict = None):
         """
         Deletes all the data saved within a collection.
         """
+        data = {} if data is None else data
+        self.__collection.delete_many(data)
 
-        self.__collection.delete_many({})
-
-### INDEX RELATED METHODS
+### INDEXING RELATED METHODS
 
     def create_2dsphere_index(self, column: str = None):
+        
         if column is None:
             warnings.warn("Cannot create index! Please specify a column to create 2dsphere index")
         else:
